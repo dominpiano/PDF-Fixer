@@ -1,3 +1,4 @@
+#Importing libraries for GUI, manipulating PDFs and time.
 import tkinter as tk
 from tkinter import *
 from tkinter.ttk import *
@@ -10,6 +11,7 @@ import time
 pages = []
 pagesInfo = []
 
+#Label describing which page is modified at any given moment and what modifier is performed
 def updateLabel():
     s = "Modyfikowane strony: "
     s += str(pagesInfo)
@@ -17,6 +19,7 @@ def updateLabel():
     if not pagesInfo:
         pgInfo.set("Modyfikowane strony: ")
 
+#Function for creating button
 def createButton():
     clear_frame()
     buttonOpen = tk.Button(frame, text = "Otwórz plik do modyfikacji",
@@ -28,6 +31,7 @@ def createButton():
                            border="0")
     buttonOpen.pack(pady="10")
 
+#Main function for modifying PDF
 def modify():
 
     # actually rotating specific pages
@@ -52,24 +56,28 @@ def modify():
     time.sleep(1)
     createButton()
 
+#Rotate right
 def pgRight():
     pages.append(entry.get() + ";90")
     pagesInfo.append(entry.get())
     updateLabel()
     entry.delete(0, 'end')
 
+#Rotate left
 def pgLeft():
     pages.append(entry.get() + ";-90")
     pagesInfo.append(entry.get())
     updateLabel()
     entry.delete(0, 'end')
 
+#Rotate 180 degrees
 def pgFull():
     pages.append(entry.get() + ";180")
     pagesInfo.append(entry.get())
     updateLabel()
     entry.delete(0, 'end')
 
+#Delete last modified page
 def undo():
     try:
         pages.pop(len(pages)-1)
@@ -78,12 +86,12 @@ def undo():
     except:
         pass
 
+#Destroy all widgets
 def clear_frame():
    for widgets in frame.winfo_children():
       widgets.destroy()
 
-
-
+#Function for opening files
 def openfile():
     clear_frame()
     global pdf_writer
@@ -123,6 +131,7 @@ def openfile():
     entry = tk.Entry(frame, width="3", font=('helvetica', 26))
     entry.pack(pady="15")
 
+    #Creating buttons
     btnRight = tk.Button(frame, command = pgRight, text="↻", font=('bodoni MT', 20, "bold"))
     btnRight.place(x=450, y=129)
 
@@ -162,7 +171,7 @@ root.geometry("800x400")
 root.resizable(False, False)
 
 
-
+#Appearance - frame and background
 frame = tk.Canvas(root)
 frame.pack(side="top", expand=True, fill="both")
 bg = tk.PhotoImage(file = "bg.png")
