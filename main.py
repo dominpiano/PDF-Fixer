@@ -10,6 +10,7 @@ import time
 
 pages = []
 pagesInfo = []
+isAllSel = False;
 
 #Label describing which page is modified at any given moment and what modifier is performed
 def updateLabel():
@@ -56,26 +57,56 @@ def modify():
     time.sleep(1)
     createButton()
 
+#Select All
+def selectAll():
+    entry.insert(0, "All")
+    global isAllSel
+    isAllSel = True
+
 #Rotate right
 def pgRight():
-    pages.append(entry.get() + ";90")
-    pagesInfo.append(entry.get())
-    updateLabel()
-    entry.delete(0, 'end')
+    if isAllSel:
+        pagesNum = pdf_reader.getNumPages()
+        pagesInfo.append(entry.get())
+        updateLabel()
+        for i in range(pagesNum + 1):
+            pages.append(str(i) + ";90")
+
+    else:
+        pages.append(entry.get() + ";90")
+        pagesInfo.append(entry.get())
+        updateLabel()
+        entry.delete(0, 'end')
 
 #Rotate left
 def pgLeft():
-    pages.append(entry.get() + ";-90")
-    pagesInfo.append(entry.get())
-    updateLabel()
-    entry.delete(0, 'end')
+    if isAllSel:
+        pagesNum = pdf_reader.getNumPages()
+        pagesInfo.append(entry.get())
+        updateLabel()
+        for i in range(pagesNum + 1):
+            pages.append(str(i) + ";-90")
+
+    else:
+        pages.append(entry.get() + ";-90")
+        pagesInfo.append(entry.get())
+        updateLabel()
+        entry.delete(0, 'end')
 
 #Rotate 180 degrees
 def pgFull():
-    pages.append(entry.get() + ";180")
-    pagesInfo.append(entry.get())
-    updateLabel()
-    entry.delete(0, 'end')
+    if isAllSel:
+        pagesNum = pdf_reader.getNumPages()
+        pagesInfo.append(entry.get())
+        updateLabel()
+        for i in range(pagesNum + 1):
+            pages.append(str(i) + ";180")
+
+    else:
+        pages.append(entry.get() + ";180")
+        pagesInfo.append(entry.get())
+        updateLabel()
+        entry.delete(0, 'end')
 
 #Delete last modified page
 def undo():
@@ -126,6 +157,10 @@ def openfile():
 
     info = tk.Label(frame, text="Po kolei wpisuj strony i klikaj ich obrócenie", font=('helvetica', 14, 'bold'), bg="white")
     info.pack(pady="10")
+
+    # Button "All"
+    btnRight = tk.Button(frame, command=selectAll, text="WSZYSTKIE", font=('bodoni MT', 14))
+    btnRight.place(x=200, y=138)
 
     global entry
     entry = tk.Entry(frame, width="3", font=('helvetica', 26))
